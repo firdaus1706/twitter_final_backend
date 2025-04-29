@@ -1,9 +1,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-dotenv.config({
-    path: "../config/env"
-})
+dotenv.config({ path: "../config/.env" });
 
 const isAuthenticated = async (req, res, next) => {
     try {
@@ -19,7 +17,11 @@ const isAuthenticated = async (req, res, next) => {
         req.user = decode.userId;
         next();
     } catch (e) {
-        console.log(e);
+        console.log("JWT verification error:", e.message);
+        return res.status(401).json({
+            message: "Invalid or expired token!",
+            success: false
+        });
     }
 }
 

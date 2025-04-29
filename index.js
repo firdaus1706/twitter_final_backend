@@ -19,14 +19,33 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 app.use(cookieParser());
-const corsOptions = {
-    origin: "http://localhost:3000",
-    credentials: true
-}
-app.use(cors(corsOptions));
+// const corsOptions = {
+//     origin: "http://localhost:3000",
+//     credentials: true
+// }
+// app.use(cors(corsOptions));
 
-app.get('/',(req,res)=>{
-    res.send("welcome to the API!")
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://twitterfinalclone.netlify.app'
+];
+
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            }
+            else {
+                callback(new Error('Not allowed by CORS!'));
+            }
+        },
+        credentials: true
+    })
+)
+
+app.get('/', (req, res) => {
+    res.send("Welcome to the API!")
 })
 
 // api
